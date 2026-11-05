@@ -48,3 +48,4 @@ export function GoogleAuthButton({
     </button>
   );
 }
+

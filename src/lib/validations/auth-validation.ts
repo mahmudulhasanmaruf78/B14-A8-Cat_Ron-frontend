@@ -41,3 +41,4 @@ export function sanitizeRedirectUrl(url: string | null | undefined): string {
   }
   return '/';
 }
+
