@@ -19,8 +19,8 @@ if (uri) {
     client = new MongoClient(uri);
   }
 } else {
-  // Fallback to avoid breaking build when MONGODB_URI is not set during prerendering
-  client = new MongoClient('mongodb://localhost:27017');
+  // Safe dummy client during static build prerendering
+  client = new MongoClient('mongodb://127.0.0.1:27017');
 }
 
 export const db = client.db(dbName);

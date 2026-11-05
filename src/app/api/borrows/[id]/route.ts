@@ -4,7 +4,10 @@ import { auth } from '@/lib/auth';
 import { getApiBaseUrl } from '@/lib/api-client';
 
 const API_BASE_URL = getApiBaseUrl();
-const JWT_SECRET = process.env.JWT_SECRET || process.env.JWT_ACCESS_SECRET || 'booknook_jwt_secret_key_change_me_in_production';
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  process.env.JWT_ACCESS_SECRET ||
+  'booknook_jwt_access_super_secret_key_2026_catron';
 
 async function signJwt(payload: Record<string, unknown>, secretKey: string): Promise<string> {
   const encoder = new TextEncoder();
