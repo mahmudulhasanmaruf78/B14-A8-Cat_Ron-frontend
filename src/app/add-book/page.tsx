@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import { AddBookForm } from '@/components/books/AddBookForm';
 
 export const metadata: Metadata = {
-  title: 'Add Book | BookNook',
+  title: 'Add a Book',
   description: 'Add a new book to the BookNook library collection.',
 };
 

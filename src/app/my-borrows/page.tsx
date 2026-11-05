@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import { MyBorrowsClient } from '@/components/borrows/MyBorrowsClient';
 
 export const metadata: Metadata = {
-  title: 'My Borrows | BookNook',
+  title: 'My Borrows',
   description: 'Manage your borrowed books and return them when you are done reading.',
 };
 

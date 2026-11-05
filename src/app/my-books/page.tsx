@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import { MyBooksClient } from '@/components/books/MyBooksClient';
 
 export const metadata: Metadata = {
-  title: 'My Books | BookNook',
+  title: 'My Books',
   description: 'View and manage books you have contributed to the BookNook library.',
 };
 

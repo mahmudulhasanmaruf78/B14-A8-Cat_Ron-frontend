@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BooksGrid } from '@/components/books/BooksGrid';
 
 export const metadata: Metadata = {
-  title: 'BookNook | All Books',
+  title: 'All Books',
   description: 'Explore the complete collection of books available in BookNook.',
 };
 

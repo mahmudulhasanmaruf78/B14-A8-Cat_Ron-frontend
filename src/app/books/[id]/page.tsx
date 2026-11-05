@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const res = await BooksService.getBookById(id);
     if (res.success && res.data) {
       return {
-        title: `${res.data.title} | BookNook`,
+        title: res.data.title,
         description: res.data.description || `Details for ${res.data.title}`,
       };
     }
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: 'Book Details | BookNook',
+    title: 'Book Details',
     description: 'Explore single book details in the BookNook library.',
   };
 }

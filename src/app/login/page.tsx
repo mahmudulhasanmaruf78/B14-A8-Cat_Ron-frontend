@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
-  title: 'Sign In | BookNook',
+  title: 'Login',
   description: 'Sign in to your BookNook account to manage your library books and borrowings.',
 };
 

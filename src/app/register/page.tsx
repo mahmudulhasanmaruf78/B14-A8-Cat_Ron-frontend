@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { RegisterForm } from '@/components/auth/RegisterForm';
 
 export const metadata: Metadata = {
-  title: 'Register | BookNook',
+  title: 'Register',
   description: 'Create a free BookNook account to explore, borrow, and track your library books.',
 };
 

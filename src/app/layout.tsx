@@ -5,7 +5,10 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 
 export const metadata: Metadata = {
-  title: 'BookNook | Digital Library Management System',
+  title: {
+    default: 'BookNook - Your Online Library',
+    template: '%s - BookNook',
+  },
   description:
     'A modern full-stack digital library management system built with Next.js, Express, TypeScript, Hero UI, and MongoDB.',
   keywords: ['BookNook', 'Library Management', 'Books', 'Next.js', 'Express', 'TypeScript'],
