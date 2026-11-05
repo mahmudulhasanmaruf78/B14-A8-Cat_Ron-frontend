@@ -7,6 +7,7 @@ import { Book } from '@/types/book';
 import { BooksService } from '@/services/books.service';
 import { BooksSkeletonGrid } from '@/components/common/Loading';
 import { EmptyState } from '@/components/common/EmptyState';
+import { EditBookModal } from './EditBookModal';
 
 interface MyBooksClientProps {
   userEmail: string;
@@ -17,6 +18,9 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Edit modal state
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
 
   const fetchMyBooks = useCallback(async () => {
     setIsLoading(true);
@@ -45,6 +49,12 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
   useEffect(() => {
     fetchMyBooks();
   }, [fetchMyBooks]);
+
+  const handleBookUpdated = (updatedBook: Book) => {
+    setBooks((prev) =>
+      prev.map((b) => (b._id === updatedBook._id ? { ...b, ...updatedBook } : b))
+    );
+  };
 
   if (isLoading) {
     return <BooksSkeletonGrid />;
@@ -162,7 +172,7 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                   <span>Added: {formattedDate}</span>
                 </div>
 
-                {/* Actions: View Details, Edit (UI ready), Delete (UI ready) */}
+                {/* Actions: View Details, Edit, Delete (prepared UI) */}
                 <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/70 flex items-center justify-between gap-2">
                   <Link
                     href={`/books/${bookId}`}
@@ -171,10 +181,11 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                     View Details →
                   </Link>
                   <div className="flex items-center gap-2">
-                    {/* Edit button (prepared UI per requirements) */}
+                    {/* Functional Edit Button */}
                     <button
                       type="button"
-                      className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-bold transition-colors inline-flex items-center gap-1"
+                      onClick={() => setEditingBook(book)}
+                      className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-sm"
                       aria-label={`Edit ${book.title}`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +198,7 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                       </svg>
                       Edit
                     </button>
-                    {/* Delete button (prepared UI per requirements) */}
+                    {/* Prepared Delete Button (UI only, delete task not in scope) */}
                     <button
                       type="button"
                       className="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-xs font-bold transition-colors"
@@ -209,6 +220,16 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
           );
         })}
       </div>
+
+      {/* Edit Book Modal */}
+      {editingBook && (
+        <EditBookModal
+          book={editingBook}
+          isOpen={Boolean(editingBook)}
+          onClose={() => setEditingBook(null)}
+          onUpdated={handleBookUpdated}
+        />
+      )}
     </div>
   );
 }

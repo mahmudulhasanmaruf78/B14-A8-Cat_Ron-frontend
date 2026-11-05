@@ -1,4 +1,4 @@
-import { Book, CreateBookInput } from '@/types/book';
+import { Book, CreateBookInput, UpdateBookInput } from '@/types/book';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -6,6 +6,13 @@ export interface CreateBookResponse {
   success: boolean;
   message: string;
   insertedId?: string;
+  data?: Book;
+  error?: string;
+}
+
+export interface UpdateBookResponse {
+  success: boolean;
+  message: string;
   data?: Book;
   error?: string;
 }
@@ -98,5 +105,26 @@ export class BooksService {
       message: data.message || 'Books retrieved successfully',
       data: Array.isArray(data.data) ? data.data : [],
     };
+  }
+
+  public static async updateBook(id: string, input: UpdateBookInput): Promise<UpdateBookResponse> {
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to update book.',
+      };
+    }
+
+    return data;
   }
 }

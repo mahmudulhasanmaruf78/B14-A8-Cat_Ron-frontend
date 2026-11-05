@@ -25,3 +25,12 @@ export interface CreateBookInput {
   totalCopies: number;
 }
 
+export interface UpdateBookInput {
+  title: string;
+  author: string;
+  category: BookCategory;
+  image: string;
+  description: string;
+  totalCopies: number;
+}
+
