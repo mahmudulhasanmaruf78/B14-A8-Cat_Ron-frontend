@@ -217,18 +217,12 @@ export class BooksService {
     return data;
   }
 
-  public static async borrowBook(input: BorrowBookInput, token?: string): Promise<BorrowBookResponse> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`${API_BASE_URL}/borrows`, {
+  public static async borrowBook(input: BorrowBookInput): Promise<BorrowBookResponse> {
+    const response = await fetch('/api/borrows', {
       method: 'POST',
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(input),
     });
 
@@ -238,6 +232,52 @@ export class BooksService {
       return {
         success: false,
         message: data.message || 'Failed to borrow book.',
+      };
+    }
+
+    return data;
+  }
+
+  public static async getUserBorrows(): Promise<GetUserBorrowsResponse> {
+    const response = await fetch('/api/borrows', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to fetch borrowed books.',
+        data: [],
+      };
+    }
+
+    return {
+      success: true,
+      message: data.message || 'Borrow records retrieved successfully',
+      data: Array.isArray(data.data) ? data.data : [],
+    };
+  }
+
+  public static async returnBook(borrowId: string): Promise<ReturnBookResponse> {
+    const response = await fetch(`/api/borrows/${borrowId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to return book.',
       };
     }
 
