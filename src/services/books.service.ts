@@ -10,6 +10,13 @@ export interface CreateBookResponse {
   error?: string;
 }
 
+export interface GetAllBooksResponse {
+  success: boolean;
+  message: string;
+  data: Book[];
+  error?: string;
+}
+
 export interface UploadImageResponse {
   success: boolean;
   url?: string;
@@ -61,5 +68,31 @@ export class BooksService {
 
     return data;
   }
-}
 
+  public static async getAllBooks(): Promise<GetAllBooksResponse> {
+    const response = await fetch(`${API_BASE_URL}/books`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Ensure data is freshly fetched in client or request-time
+      cache: 'no-store',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to fetch books from the library.',
+        data: [],
+      };
+    }
+
+    return {
+      success: true,
+      message: data.message || 'Books retrieved successfully',
+      data: Array.isArray(data.data) ? data.data : [],
+    };
+  }
+}
