@@ -24,3 +24,4 @@ export interface CreateBookInput {
   userEmail: string;
   totalCopies: number;
 }
+
