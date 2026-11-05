@@ -26,6 +26,35 @@ export interface DeleteBookResponse {
   error?: string;
 }
 
+export interface SingleBookResponse {
+  success: boolean;
+  message: string;
+  data?: Book;
+  error?: string;
+}
+
+export interface BorrowBookInput {
+  bookId: string;
+  borrowDate: string;
+  returnDate: string;
+}
+
+export interface BorrowBookResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    _id?: string;
+    bookId: string;
+    bookTitle: string;
+    bookImage: string;
+    userEmail: string;
+    borrowDate: string;
+    returnDate: string;
+    createdAt?: string;
+  };
+  error?: string;
+}
+
 export interface GetAllBooksResponse {
   success: boolean;
   message: string;
@@ -151,6 +180,54 @@ export class BooksService {
       return {
         success: false,
         message: data.message || 'Failed to delete book.',
+      };
+    }
+
+    return data;
+  }
+
+  public static async getBookById(id: string): Promise<SingleBookResponse> {
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to retrieve book details.',
+      };
+    }
+
+    return data;
+  }
+
+  public static async borrowBook(input: BorrowBookInput, token?: string): Promise<BorrowBookResponse> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/borrows`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(input),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to borrow book.',
       };
     }
 
