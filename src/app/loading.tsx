@@ -1,5 +1,5 @@
-import React from 'react';
-import { LoadingSpinner } from '@/components/common/Loading';
+import React from "react";
+import { LoadingSpinner } from "@/components/common/Loading";
 
 export default function Loading() {
   return (
@@ -8,4 +8,3 @@ export default function Loading() {
     </div>
   );
 }
-
