@@ -80,7 +80,7 @@ export function BackendStatusCard() {
               </div>
               <div className="text-xs text-zinc-500 dark:text-zinc-400 flex flex-col gap-1 pt-1">
                 <div>Uptime: {formatUptime(data.uptime)}</div>
-                <div>Last ping: {formatDate(data.timestamp)}</div>
+                <div>Last ping: <span suppressHydrationWarning>{data.timestamp ? formatDate(data.timestamp) : '—'}</span></div>
               </div>
             </div>
 

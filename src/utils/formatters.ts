@@ -7,7 +7,11 @@ export function formatUptime(seconds: number): string {
 
 export function formatDate(isoString: string): string {
   try {
-    return new Date(isoString).toLocaleString();
+    // Use Intl.DateTimeFormat to avoid new Date() prerender issues in Next.js 16
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: 'short',
+      timeStyle: 'medium',
+    }).format(new Date(isoString));
   } catch {
     return isoString;
   }

@@ -28,8 +28,35 @@ export function useBackendHealth() {
   }, []);
 
   useEffect(() => {
-    checkHealth();
-  }, [checkHealth]);
+    let ignore = false;
+    async function initCheck() {
+      try {
+        const response = await healthService.checkBackendHealth();
+        if (!ignore) {
+          setData(response);
+          setError(null);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setData(null);
+          setError(
+            err instanceof Error
+              ? err.message
+              : 'Unable to reach backend server at http://localhost:5000'
+          );
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    initCheck();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return { data, loading, error, refetch: checkHealth };
 }
