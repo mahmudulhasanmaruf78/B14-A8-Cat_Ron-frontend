@@ -69,8 +69,12 @@ export class BooksService {
     return data;
   }
 
-  public static async getAllBooks(): Promise<GetAllBooksResponse> {
-    const response = await fetch(`${API_BASE_URL}/books`, {
+  public static async getAllBooks(limit?: number): Promise<GetAllBooksResponse> {
+    const url = limit && limit > 0
+      ? `${API_BASE_URL}/books?limit=${limit}`
+      : `${API_BASE_URL}/books`;
+
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

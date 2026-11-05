@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { HeroSlider } from '../components/home/HeroSlider';
+import { NewArrivals } from '../components/home/NewArrivals';
 import { HowItWorks } from '../components/home/HowItWorks';
 import { BookCategories } from '../components/home/BookCategories';
 import { BackendStatusCard } from '../components/BackendStatusCard';
@@ -8,13 +9,16 @@ import { HealthCheckBadge } from '../features/health/HealthCheckBadge';
 export default function HomePage() {
   return (
     <>
-      {/* Phase 2: Hero Slider */}
+      {/* Hero Slider */}
       <HeroSlider />
 
-      {/* Phase 2: How Borrowing Works */}
+      {/* Phase 3: Dynamic New Arrivals */}
+      <NewArrivals />
+
+      {/* How Borrowing Works */}
       <HowItWorks />
 
-      {/* Phase 2: Book Categories */}
+      {/* Book Categories */}
       <BookCategories />
 
       {/* Phase 1: Architecture Info (preserved) */}
