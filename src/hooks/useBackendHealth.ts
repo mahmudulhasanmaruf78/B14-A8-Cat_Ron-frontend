@@ -33,3 +33,4 @@ export function useBackendHealth() {
 
   return { data, loading, error, refetch: checkHealth };
 }
+
