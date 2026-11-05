@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
+import { getApiBaseUrl } from '@/lib/api-client';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-const JWT_SECRET = process.env.JWT_ACCESS_SECRET || 'booknook_jwt_access_super_secret_key_2026_catron';
+const API_BASE_URL = getApiBaseUrl();
+const JWT_SECRET = process.env.JWT_SECRET || process.env.JWT_ACCESS_SECRET || 'booknook_jwt_secret_key_change_me_in_production';
 
 // Helper to construct a HS256 JWT using standard Web Crypto API
 async function signJwt(payload: Record<string, unknown>, secretKey: string): Promise<string> {

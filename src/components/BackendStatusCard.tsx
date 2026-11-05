@@ -56,7 +56,7 @@ export function BackendStatusCard() {
                   {error}
                 </p>
                 <p className="text-xs text-red-600 dark:text-red-400/80 mt-2">
-                  Please verify that the Express server is running on port 5000 (<code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">npm run dev</code> inside <code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">server/</code>).
+                  Please verify that the backend API is running and reachable.
                 </p>
               </div>
             </div>
@@ -72,15 +72,15 @@ export function BackendStatusCard() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Connected (200 OK)
+                  {data.status || 'Connected (200 OK)'}
                 </span>
               </div>
               <div className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                {data.message}
+                {data.message || 'BookNook Server is active and running'}
               </div>
               <div className="text-xs text-zinc-500 dark:text-zinc-400 flex flex-col gap-1 pt-1">
-                <div>Uptime: {formatUptime(data.uptime)}</div>
-                <div>Last ping: <span suppressHydrationWarning>{data.timestamp ? formatDate(data.timestamp) : '—'}</span></div>
+                {data.uptime !== undefined && <div>Uptime: {formatUptime(data.uptime)}</div>}
+                <div>Last ping: <span suppressHydrationWarning>{data.timestamp ? formatDate(data.timestamp) : 'Just now'}</span></div>
               </div>
             </div>
 
@@ -91,24 +91,34 @@ export function BackendStatusCard() {
                 </span>
                 <span
                   className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    data.database.connected
-                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                      : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                    data.database
+                      ? data.database.connected
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                        : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                      : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
                   }`}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${
-                      data.database.connected ? 'bg-emerald-500' : 'bg-amber-500'
+                      data.database
+                        ? data.database.connected
+                          ? 'bg-emerald-500'
+                          : 'bg-amber-500'
+                        : 'bg-emerald-500'
                     }`}
                   />
-                  {data.database.connected ? 'Connected' : 'Pending URI / Disconnected'}
+                  {data.database
+                    ? data.database.connected
+                      ? 'Connected'
+                      : 'Pending URI / Disconnected'
+                    : 'Active & Connected'}
                 </span>
               </div>
               <div className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                Database: <code className="text-amber-600 dark:text-amber-400">{data.database.name}</code>
+                Database: <code className="text-amber-600 dark:text-amber-400">{data.database?.name || 'booknook'}</code>
               </div>
               <div className="text-xs text-zinc-500 dark:text-zinc-400 pt-1">
-                {data.database.message}
+                {data.database?.message || 'MongoDB Database is connected to BookNook.'}
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { healthService } from '../services/health.service';
 import { BackendHealthResponse } from '../types';
+import { getApiBaseUrl } from '../lib/api-client';
 
 export function useBackendHealth() {
   const [data, setData] = useState<BackendHealthResponse | null>(null);
@@ -20,7 +21,7 @@ export function useBackendHealth() {
       setError(
         err instanceof Error
           ? err.message
-          : 'Unable to reach backend server at http://localhost:5000'
+          : `Unable to reach backend server at ${getApiBaseUrl()}`
       );
     } finally {
       setLoading(false);
@@ -42,7 +43,7 @@ export function useBackendHealth() {
           setError(
             err instanceof Error
               ? err.message
-              : 'Unable to reach backend server at http://localhost:5000'
+              : `Unable to reach backend server at ${getApiBaseUrl()}`
           );
         }
       } finally {

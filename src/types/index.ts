@@ -1,9 +1,10 @@
 export interface BackendHealthResponse {
-  status: 'ok' | 'degraded' | 'error';
+  success?: boolean;
+  status: string;
   message: string;
-  uptime: number;
-  timestamp: string;
-  database: {
+  uptime?: number;
+  timestamp?: string;
+  database?: {
     connected: boolean;
     name: string;
     message: string;

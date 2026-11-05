@@ -1,7 +1,6 @@
 import { Book, CreateBookInput, UpdateBookInput } from '@/types/book';
 import { BorrowRecord } from '@/types/borrow';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+import { getApiBaseUrl } from '@/lib/api-client';
 
 export interface CreateBookResponse {
   success: boolean;
@@ -125,9 +124,10 @@ export class BooksService {
   }
 
   public static async getAllBooks(limit?: number): Promise<GetAllBooksResponse> {
+    const baseUrl = getApiBaseUrl();
     const url = limit && limit > 0
-      ? `${API_BASE_URL}/books?limit=${limit}`
-      : `${API_BASE_URL}/books`;
+      ? `${baseUrl}/books?limit=${limit}`
+      : `${baseUrl}/books`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -197,7 +197,8 @@ export class BooksService {
   }
 
   public static async getBookById(id: string): Promise<SingleBookResponse> {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/books/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 # BookNook - A Small Online Library
 
 ## Project Overview
+
 **BookNook** is a modern full-stack digital online library management platform. It allows readers and book enthusiasts to discover diverse literary titles, borrow books with real-time inventory management, add and manage their personal book contributions, and track reading borrowings.
 
 Built with performance, security, and responsive design in mind using the Next.js App Router, Hero UI, and an Express.js/MongoDB backend.
@@ -8,6 +9,7 @@ Built with performance, security, and responsive design in mind using the Next.j
 ---
 
 ## Key Features
+
 1. **Browse Complete Book Collection**: Explore all books in a responsive catalog filtered by category (Fiction, Science, History, Kids, Others) with real-time availability badges.
 2. **User Authentication**: Secure authentication supporting both Email/Password registration/login and Google OAuth via BetterAuth with MongoDB adapter.
 3. **Add, Edit, and Delete Books**: Authenticated users can contribute books with cover photos hosted on imgbb, pre-filled update forms, and custom confirmation modals.
@@ -20,6 +22,7 @@ Built with performance, security, and responsive design in mind using the Next.j
 ---
 
 ## Technology Stack
+
 - **Framework**: Next.js 16 (App Router)
 - **Library**: React 19
 - **Language**: TypeScript
@@ -33,22 +36,23 @@ Built with performance, security, and responsive design in mind using the Next.j
 
 ## Available Pages & Route Matrix
 
-| Route | Page Title | Access Level | Description |
-|---|---|---|---|
-| `/` | BookNook - Your Online Library | **Public** | Hero slider, New Arrivals, categories, and workflow overview |
-| `/books` | All Books - BookNook | **Public** | Complete public library catalog |
-| `/books/[id]` | [Book Title] - BookNook | **Private** | Detailed book view, contributor metadata, and Borrow modal |
-| `/add-book` | Add a Book - BookNook | **Private** | Form with image upload to add new titles |
-| `/my-books` | My Books - BookNook | **Private** | Manage personal books with pre-filled edit and delete modals |
-| `/my-borrows` | My Borrows - BookNook | **Private** | Manage active borrowings and return books |
-| `/login` | Login - BookNook | **Public** | Account sign-in (Credentials & Google) |
-| `/register` | Register - BookNook | **Public** | Create a new reader account |
-| `/not-found` | Page Not Found | **Public** | Custom 404 page with navigation shortcuts |
+| Route         | Page Title                     | Access Level | Description                                                  |
+| ------------- | ------------------------------ | ------------ | ------------------------------------------------------------ |
+| `/`           | BookNook - Your Online Library | **Public**   | Hero slider, New Arrivals, categories, and workflow overview |
+| `/books`      | All Books - BookNook           | **Public**   | Complete public library catalog                              |
+| `/books/[id]` | [Book Title] - BookNook        | **Private**  | Detailed book view, contributor metadata, and Borrow modal   |
+| `/add-book`   | Add a Book - BookNook          | **Private**  | Form with image upload to add new titles                     |
+| `/my-books`   | My Books - BookNook            | **Private**  | Manage personal books with pre-filled edit and delete modals |
+| `/my-borrows` | My Borrows - BookNook          | **Private**  | Manage active borrowings and return books                    |
+| `/login`      | Login - BookNook               | **Public**   | Account sign-in (Credentials & Google)                       |
+| `/register`   | Register - BookNook            | **Public**   | Create a new reader account                                  |
+| `/not-found`  | Page Not Found                 | **Public**   | Custom 404 page with navigation shortcuts                    |
 
 ---
 
 ## Environment Variables
-Create a `.env.local` file in the `client` directory with the following variables:
+
+Create a `.env` file in the `client` directory with the following variables:
 
 ```env
 # Live or local backend API URL
@@ -79,6 +83,7 @@ JWT_ACCESS_SECRET=your_jwt_access_secret_matching_backend
 ---
 
 ## Project Structure
+
 ```text
 client/
 ├── src/
@@ -121,22 +126,27 @@ client/
 ---
 
 ## Backend Integration
+
 The client communicates with the Express.js and MongoDB backend using typed service calls (`BooksService`):
+
 - Public endpoints (`GET /books`, `GET /books/:id`) are queried directly.
 - Protected endpoints (`POST /books`, `PATCH /books/:id`, `DELETE /books/:id`, `POST /borrows`, `GET /borrows`, `DELETE /borrows/:id`) authenticate via verified HS256 JWT tokens generated through authenticated server route handlers, ensuring complete cryptographic validation and ownership enforcement.
 
 ---
 
 ## Installation and Setup
+
 1. **Prerequisites**: Node.js 18+ and npm / pnpm / yarn installed.
 2. **Install Dependencies**: Install packages configured in `package.json`.
-3. **Environment Setup**: Copy environment variable placeholders into `.env.local` and provide your MongoDB, Google OAuth, and imgbb credentials.
+3. **Environment Setup**: Copy environment variable placeholders into `.env` and provide your MongoDB, Google OAuth, and imgbb credentials.
 4. **Run Development Server**: Start the local development server (default port `3000`).
 5. **Build for Production**: Compile the Next.js production build using `next build`.
 
 ---
 
 ## Deployment
+
 The client is optimized for deployment on **Vercel**:
+
 - Ensure all environment variables listed above are added in the Vercel Project Settings.
 - Configure authorized redirect URIs in Google Cloud Console to include your production Vercel domain (`https://<your-project>.vercel.app/api/auth/callback/google`).

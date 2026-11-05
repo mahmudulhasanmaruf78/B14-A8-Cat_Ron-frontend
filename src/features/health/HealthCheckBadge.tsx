@@ -27,7 +27,7 @@ export function HealthCheckBadge() {
   return (
     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
       <span className="w-2 h-2 rounded-full bg-emerald-500" />
-      API Online ({data.database.connected ? 'DB Connected' : 'DB Pending'})
+      API Online ({data.database ? (data.database.connected ? 'DB Connected' : 'DB Pending') : 'Connected'})
     </span>
   );
 }

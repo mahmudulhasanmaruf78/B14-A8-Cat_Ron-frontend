@@ -91,14 +91,24 @@ export function EditBookModal({ book, isOpen, onClose, onUpdated }: EditBookModa
         totalCopies: Number(totalCopies),
       });
 
-      if (!updateRes.success || !updateRes.data) {
+      if (!updateRes.success) {
         toast.danger(updateRes.message || 'Failed to update book');
         setIsSubmitting(false);
         return;
       }
 
+      const updatedBook: Book = updateRes.data || {
+        ...book,
+        title: title.trim(),
+        author: author.trim(),
+        category,
+        image: image.trim(),
+        description: description.trim(),
+        totalCopies: Number(totalCopies),
+      };
+
       toast.success('Book updated successfully!');
-      onUpdated(updateRes.data);
+      onUpdated(updatedBook);
       onClose();
     } catch {
       toast.danger('An unexpected network error occurred while saving.');
