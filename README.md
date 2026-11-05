@@ -1,152 +1,131 @@
-# BookNook - A Small Online Library
+# 📖 BookNook - A Small Online Library (Client)
 
-## Project Overview
+A modern full-stack digital online library management platform where users can browse diverse book collections, borrow titles with real-time inventory control, manage personal book listings, and return books seamlessly.
 
-**BookNook** is a modern full-stack digital online library management platform. It allows readers and book enthusiasts to discover diverse literary titles, borrow books with real-time inventory management, add and manage their personal book contributions, and track reading borrowings.
-
-Built with performance, security, and responsive design in mind using the Next.js App Router, Hero UI, and an Express.js/MongoDB backend.
-
----
-
-## Key Features
-
-1. **Browse Complete Book Collection**: Explore all books in a responsive catalog filtered by category (Fiction, Science, History, Kids, Others) with real-time availability badges.
-2. **User Authentication**: Secure authentication supporting both Email/Password registration/login and Google OAuth via BetterAuth with MongoDB adapter.
-3. **Add, Edit, and Delete Books**: Authenticated users can contribute books with cover photos hosted on imgbb, pre-filled update forms, and custom confirmation modals.
-4. **Borrowing with Real-Time Inventory Control**: Borrow books with borrow/return date scheduling and atomic `$inc` stock decrement, ensuring copies never drop below zero.
-5. **Prevent Duplicate Borrowing**: Users cannot borrow multiple copies of the same book simultaneously.
-6. **My Books Management**: Private dashboard allowing contributors to review, update, or remove the books they have added.
-7. **My Borrows Dashboard & Return Book**: Private dashboard listing all active borrowings with a custom Return Book confirmation modal restoring available copies.
-8. **Consistent UX Polish**: Route and component-level loading spinners, custom BookNook-themed 404 Not Found page, and dynamic page metadata titles.
+- 🌐 **Live Application**: [https://b14-a8-cat-ron-frontend.vercel.app](https://b14-a8-cat-ron-frontend.vercel.app)
+- 🔌 **Backend API**: [https://b14-a8-cat-ron-backend.vercel.app](https://b14-a8-cat-ron-backend.vercel.app)
+- 📂 **Backend Repo**: [https://github.com/mahmudulhasanmaruf78/B14-A8-Cat-Ron-backend](https://github.com/mahmudulhasanmaruf78/B14-A8-Cat-Ron-backend)
 
 ---
 
-## Technology Stack
+## 🌟 Key Features
 
-- **Framework**: Next.js 16 (App Router)
-- **Library**: React 19
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Hero UI & Custom Accessible Modals
-- **Authentication**: BetterAuth (MongoDB Adapter & Google OAuth)
-- **Image Hosting**: imgbb API
-- **Icons & Sliders**: Swiper & Custom SVG Icons
+1. **📚 Complete Catalog & Discovery**:
+   - Browse the complete library collection with real-time text search (by title and author) and category filters (`Fiction`, `Science`, `History`, `Kids`, `Others`).
+   - Interactive hero slider highlighting featured literature and fresh new arrivals.
+
+2. **🔐 Secure Authentication**:
+   - Robust authentication powered by **BetterAuth** supporting both Email/Password registration/login and one-click Google OAuth.
+
+3. **🌓 Dark & Light Mode Support**:
+   - Built-in theme switcher with smooth transitions and persistent storage in `localStorage`.
+   - Hydration-safe script prevents Flash of Unstyled Theme (FOUT).
+
+4. **✏️ Book Contribution & Management (Full CRUD)**:
+   - Add new books with cover images uploaded to ImgBB.
+   - Private **My Books** dashboard to inspect, edit (pre-filled modal), and delete contributed books.
+
+5. **🔄 Borrowing & Real-Time Stock Control**:
+   - Interactive Borrow Modal with custom date-range pickers and automatic validation.
+   - Decrements available copies atomically using MongoDB `$inc`.
+   - **Double-Borrow Prevention**: Blocks borrowing the same book twice simultaneously.
+
+6. **📥 My Borrows & Return Flow**:
+   - Private **My Borrows** circulation panel showing active borrowings and due dates.
+   - Return book operation with confirmation dialog, immediately restoring available copies.
+
+7. **✨ Polished UX & Feedback**:
+   - Route-level and component-level loading skeletons and spinners.
+   - Custom BookNook-themed 404 Not Found page.
+   - Dynamic page metadata and browser document titles (`generateMetadata`).
+   - Informative toast alerts using `@heroui/react`.
 
 ---
 
-## Available Pages & Route Matrix
+## 🛠️ Technology Stack
 
-| Route         | Page Title                     | Access Level | Description                                                  |
-| ------------- | ------------------------------ | ------------ | ------------------------------------------------------------ |
-| `/`           | BookNook - Your Online Library | **Public**   | Hero slider, New Arrivals, categories, and workflow overview |
-| `/books`      | All Books - BookNook           | **Public**   | Complete public library catalog                              |
-| `/books/[id]` | [Book Title] - BookNook        | **Private**  | Detailed book view, contributor metadata, and Borrow modal   |
-| `/add-book`   | Add a Book - BookNook          | **Private**  | Form with image upload to add new titles                     |
-| `/my-books`   | My Books - BookNook            | **Private**  | Manage personal books with pre-filled edit and delete modals |
-| `/my-borrows` | My Borrows - BookNook          | **Private**  | Manage active borrowings and return books                    |
-| `/login`      | Login - BookNook               | **Public**   | Account sign-in (Credentials & Google)                       |
-| `/register`   | Register - BookNook            | **Public**   | Create a new reader account                                  |
-| `/not-found`  | Page Not Found                 | **Public**   | Custom 404 page with navigation shortcuts                    |
+| Layer | Technologies |
+|---|---|
+| **Framework** | [Next.js 16](https://nextjs.org/) (App Router & Turbopack) |
+| **Library** | [React 19](https://react.dev/) |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) |
+| **UI Components** | [Hero UI](https://heroui.com/) & Custom Accessible Modals |
+| **Authentication** | [BetterAuth](https://better-auth.com/) (MongoDB Adapter & Google OAuth) |
+| **Carousels & Motion** | [Swiper.js](https://swiperjs.com/) & [Framer Motion](https://www.framer.com/motion/) |
+| **Image Hosting** | [ImgBB API](https://imgbb.com/) |
+| **Deployment** | [Vercel](https://vercel.com/) |
 
 ---
 
-## Environment Variables
+## 🗺️ Route Matrix
 
-Create a `.env` file in the `client` directory with the following variables:
+| Route | Page Title | Access | Description |
+|---|---|---|---|
+| `/` | BookNook - Your Online Library | **Public** | Hero slider, New Arrivals, categories, and workflow steps |
+| `/books` | All Books - BookNook | **Public** | Catalog with search, filter tabs, and book cards |
+| `/books/[id]` | [Book Title] - BookNook | **Private** | Detailed overview, stock status, and Borrow modal |
+| `/add-book` | Add a Book - BookNook | **Private** | Form with image upload to contribute new titles |
+| `/my-books` | My Books - BookNook | **Private** | Manage contributed books with Edit and Delete modals |
+| `/my-borrows` | My Borrows - BookNook | **Private** | Track active borrowings and process book returns |
+| `/login` | Login - BookNook | **Public** | Sign in with Credentials or Google |
+| `/register` | Register - BookNook | **Public** | Register a new reader account |
+| `/not-found` | Page Not Found | **Public** | BookNook-styled custom 404 page |
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the `client/` directory:
 
 ```env
-# Live or local backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:5000
+# Live Backend API URL
+NEXT_PUBLIC_API_URL=https://b14-a8-cat-ron-backend.vercel.app
+
+# Frontend Application URL
+NEXT_PUBLIC_APP_URL=https://b14-a8-cat-ron-frontend.vercel.app
 
 # BetterAuth Configuration
-BETTER_AUTH_SECRET=your_better_auth_secret_32_characters_minimum
-BETTER_AUTH_URL=http://localhost:3000
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+BETTER_AUTH_SECRET=your_better_auth_secret_32_chars_minimum
+BETTER_AUTH_URL=https://b14-a8-cat-ron-frontend.vercel.app
 
-# MongoDB Connection (for BetterAuth Adapter)
-MONGODB_URI=your_mongodb_connection_string
+# MongoDB Connection (for BetterAuth storage)
+MONGODB_URI=your_mongodb_atlas_connection_string
 DB_NAME=booknook
 
 # Google OAuth Credentials
-GOOGLE_CLIENT_ID=your_google_oauth_client_id
-GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-# Image Upload
+# Image Hosting
 IMGBB_API_KEY=your_imgbb_api_key
 
-# JWT Token Secret for Backend Communication
-JWT_ACCESS_SECRET=your_jwt_access_secret_matching_backend
-```
-
-> **Note:** Never commit actual secrets or private API keys to version control.
-
----
-
-## Project Structure
-
-```text
-client/
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── login/          # Login page
-│   │   │   └── register/       # Register page
-│   │   ├── add-book/           # Add Book private route
-│   │   ├── api/
-│   │   │   ├── auth/           # BetterAuth route handler
-│   │   │   ├── books/          # Authenticated proxy to backend books API
-│   │   │   ├── borrows/        # Authenticated proxy to backend borrows API
-│   │   │   └── upload/         # Imgbb image upload proxy route
-│   │   ├── books/
-│   │   │   ├── [id]/           # Book Details private route & metadata
-│   │   │   ├── loading.tsx     # Route-level books loading skeleton
-│   │   │   └── page.tsx        # All Books public catalog
-│   │   ├── my-books/           # My Books private dashboard
-│   │   ├── my-borrows/         # My Borrows private dashboard
-│   │   ├── layout.tsx          # Root layout with Navbar & Footer
-│   │   ├── loading.tsx         # Global route loading spinner
-│   │   ├── not-found.tsx       # Custom BookNook 404 page
-│   │   └── page.tsx            # Homepage
-│   ├── components/
-│   │   ├── auth/               # Login & Register forms
-│   │   ├── books/              # BookCard, BooksGrid, AddBookForm, Modals
-│   │   ├── borrows/            # MyBorrowsClient & ReturnConfirmationModal
-│   │   ├── common/             # LoadingSpinner, Skeletons, EmptyState
-│   │   ├── home/               # HeroSlider, NewArrivals, HowItWorks
-│   │   └── layout/             # Responsive Navbar & Footer
-│   ├── lib/
-│   │   ├── auth.ts             # BetterAuth server config
-│   │   ├── auth-client.ts      # BetterAuth React client hooks
-│   │   └── mongodb.ts          # MongoClient instance for Auth
-│   ├── services/
-│   │   └── books.service.ts    # Unified API service layer
-│   └── types/                  # TypeScript interfaces (Book, Borrow, etc.)
+# JWT Secret for Server Communication
+JWT_SECRET=your_shared_jwt_secret_matching_backend
 ```
 
 ---
 
-## Backend Integration
+## 🚀 Running Locally
 
-The client communicates with the Express.js and MongoDB backend using typed service calls (`BooksService`):
+### 1. Prerequisites
+- Node.js 18 or newer
+- npm, yarn, or pnpm
 
-- Public endpoints (`GET /books`, `GET /books/:id`) are queried directly.
-- Protected endpoints (`POST /books`, `PATCH /books/:id`, `DELETE /books/:id`, `POST /borrows`, `GET /borrows`, `DELETE /borrows/:id`) authenticate via verified HS256 JWT tokens generated through authenticated server route handlers, ensuring complete cryptographic validation and ownership enforcement.
+### 2. Installation
+```bash
+cd client
+npm install
+```
 
----
+### 3. Start Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Installation and Setup
-
-1. **Prerequisites**: Node.js 18+ and npm / pnpm / yarn installed.
-2. **Install Dependencies**: Install packages configured in `package.json`.
-3. **Environment Setup**: Copy environment variable placeholders into `.env` and provide your MongoDB, Google OAuth, and imgbb credentials.
-4. **Run Development Server**: Start the local development server (default port `3000`).
-5. **Build for Production**: Compile the Next.js production build using `next build`.
-
----
-
-## Deployment
-
-The client is optimized for deployment on **Vercel**:
-
-- Ensure all environment variables listed above are added in the Vercel Project Settings.
-- Configure authorized redirect URIs in Google Cloud Console to include your production Vercel domain (`https://<your-project>.vercel.app/api/auth/callback/google`).
+### 4. Build for Production
+```bash
+npm run build
+npm start
+```
