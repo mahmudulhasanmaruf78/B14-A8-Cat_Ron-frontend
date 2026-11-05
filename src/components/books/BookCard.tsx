@@ -125,3 +125,4 @@ export function BookCard({ book }: BookCardProps) {
     </div>
   );
 }
+
