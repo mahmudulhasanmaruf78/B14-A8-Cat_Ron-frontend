@@ -104,7 +104,7 @@ export class BooksService {
   }
 
   public static async createBook(input: CreateBookInput): Promise<CreateBookResponse> {
-    const response = await fetch(`${API_BASE_URL}/books`, {
+    const response = await fetch('/api/books', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ export class BooksService {
   }
 
   public static async updateBook(id: string, input: UpdateBookInput): Promise<UpdateBookResponse> {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const response = await fetch(`/api/books/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export class BooksService {
   }
 
   public static async deleteBook(id: string): Promise<DeleteBookResponse> {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const response = await fetch(`/api/books/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
