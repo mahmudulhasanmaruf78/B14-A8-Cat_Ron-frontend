@@ -17,6 +17,15 @@ export interface UpdateBookResponse {
   error?: string;
 }
 
+export interface DeleteBookResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    deletedId: string;
+  };
+  error?: string;
+}
+
 export interface GetAllBooksResponse {
   success: boolean;
   message: string;
@@ -122,6 +131,26 @@ export class BooksService {
       return {
         success: false,
         message: data.message || 'Failed to update book.',
+      };
+    }
+
+    return data;
+  }
+
+  public static async deleteBook(id: string): Promise<DeleteBookResponse> {
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || 'Failed to delete book.',
       };
     }
 

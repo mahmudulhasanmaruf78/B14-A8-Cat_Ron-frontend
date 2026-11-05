@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { toast } from '@heroui/react';
 import { Book } from '@/types/book';
 import { BooksService } from '@/services/books.service';
 import { BooksSkeletonGrid } from '@/components/common/Loading';
 import { EmptyState } from '@/components/common/EmptyState';
 import { EditBookModal } from './EditBookModal';
+import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 
 interface MyBooksClientProps {
   userEmail: string;
@@ -21,6 +23,10 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
 
   // Edit modal state
   const [editingBook, setEditingBook] = useState<Book | null>(null);
+
+  // Delete modal state
+  const [deletingBook, setDeletingBook] = useState<Book | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchMyBooks = useCallback(async () => {
     setIsLoading(true);
@@ -54,6 +60,27 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
     setBooks((prev) =>
       prev.map((b) => (b._id === updatedBook._id ? { ...b, ...updatedBook } : b))
     );
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingBook || !deletingBook._id || isDeleting) return;
+
+    setIsDeleting(true);
+    try {
+      const res = await BooksService.deleteBook(deletingBook._id);
+      if (res.success) {
+        toast.success('Book deleted successfully');
+        // Remove deleted book immediately from the local state
+        setBooks((prev) => prev.filter((b) => b._id !== deletingBook._id));
+        setDeletingBook(null);
+      } else {
+        toast.danger(res.message || 'Failed to delete book');
+      }
+    } catch {
+      toast.danger('An unexpected error occurred while deleting the book');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (isLoading) {
@@ -172,7 +199,7 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                   <span>Added: {formattedDate}</span>
                 </div>
 
-                {/* Actions: View Details, Edit, Delete (prepared UI) */}
+                {/* Actions: View Details, Edit, Delete */}
                 <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/70 flex items-center justify-between gap-2">
                   <Link
                     href={`/books/${bookId}`}
@@ -198,10 +225,11 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                       </svg>
                       Edit
                     </button>
-                    {/* Prepared Delete Button (UI only, delete task not in scope) */}
+                    {/* Functional Delete Button */}
                     <button
                       type="button"
-                      className="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-xs font-bold transition-colors"
+                      onClick={() => setDeletingBook(book)}
+                      className="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-xs font-bold transition-colors inline-flex items-center gap-1"
                       aria-label={`Delete ${book.title}`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,6 +240,7 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                         />
                       </svg>
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -228,6 +257,19 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
           isOpen={Boolean(editingBook)}
           onClose={() => setEditingBook(null)}
           onUpdated={handleBookUpdated}
+        />
+      )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {deletingBook && (
+        <DeleteConfirmationModal
+          book={deletingBook}
+          isOpen={Boolean(deletingBook)}
+          isDeleting={isDeleting}
+          onClose={() => {
+            if (!isDeleting) setDeletingBook(null);
+          }}
+          onConfirm={handleDeleteConfirm}
         />
       )}
     </div>
