@@ -1,4 +1,5 @@
 import { Book, CreateBookInput, UpdateBookInput } from '@/types/book';
+import { BorrowRecord } from '@/types/borrow';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -42,15 +43,24 @@ export interface BorrowBookInput {
 export interface BorrowBookResponse {
   success: boolean;
   message: string;
+  data?: BorrowRecord;
+  error?: string;
+}
+
+export interface GetUserBorrowsResponse {
+  success: boolean;
+  message: string;
+  data: BorrowRecord[];
+  error?: string;
+}
+
+export interface ReturnBookResponse {
+  success: boolean;
+  message: string;
   data?: {
-    _id?: string;
+    borrowId: string;
     bookId: string;
-    bookTitle: string;
-    bookImage: string;
-    userEmail: string;
-    borrowDate: string;
-    returnDate: string;
-    createdAt?: string;
+    returnedTitle: string;
   };
   error?: string;
 }
