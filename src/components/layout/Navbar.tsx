@@ -1,14 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from '@/lib/auth-client';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
-const navLinks = [
+const publicNavLinks = [
   { label: 'Home', href: '/' },
   { label: 'All Books', href: '/books' },
+];
+
+const privateNavLinks = [
   { label: 'Add Book', href: '/add-book' },
   { label: 'My Books', href: '/my-books' },
   { label: 'My Borrows', href: '/my-borrows' },
@@ -16,17 +20,33 @@ const navLinks = [
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // BetterAuth session
   const { data: session, isPending } = useSession();
 
-  // Close menu when route changes during render
+  // Close menus when route changes
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setIsMenuOpen(false);
+    setIsUserDropdownOpen(false);
   }
+
+  // Close user dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
@@ -41,8 +61,14 @@ export function Navbar() {
   }, [isMenuOpen]);
 
   const handleSignOut = async () => {
+    setIsUserDropdownOpen(false);
     await signOut();
   };
+
+  // Only show private links when user is logged in
+  const visibleNavLinks = session?.user
+    ? [...publicNavLinks, ...privateNavLinks]
+    : publicNavLinks;
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm">
@@ -66,7 +92,7 @@ export function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
-          {navLinks.map((link) => {
+          {visibleNavLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -85,7 +111,7 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Right Section: Theme Toggle + Auth Buttons */}
+        {/* Right Section: Theme Toggle + Auth Buttons / Profile Dropdown */}
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
@@ -94,22 +120,77 @@ export function Navbar() {
             {isPending ? (
               <div className="w-20 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
             ) : session?.user ? (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-xs flex items-center justify-center border border-amber-500/30">
-                    {session.user.name?.[0]?.toUpperCase() || 'U'}
-                  </div>
-                  <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 max-w-[100px] truncate">
-                    {session.user.name}
-                  </span>
-                </div>
+              <div className="relative" ref={dropdownRef}>
+                {/* User Photo / Avatar Button */}
                 <button
                   type="button"
-                  onClick={handleSignOut}
-                  className="px-3 py-1.5 text-xs font-medium rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition-colors"
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-amber-500/50 transition-all focus:outline-none"
+                  aria-expanded={isUserDropdownOpen}
+                  aria-label="User profile menu"
                 >
-                  Sign Out
+                  {session.user.image ? (
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden border border-amber-500/30">
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        fill
+                        sizes="32px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-xs flex items-center justify-center border border-amber-500/30">
+                      {session.user.name?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <svg
+                    className={`w-3.5 h-3.5 text-zinc-500 transition-transform duration-200 ${
+                      isUserDropdownOpen ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
+
+                {/* Dropdown Menu */}
+                {isUserDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-2 shadow-xl animate-fadeIn z-50">
+                    <div className="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 mb-1">
+                      <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                        {session.user.name}
+                      </p>
+                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                        {session.user.email}
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/my-books"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      My Profile
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors text-left"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -157,7 +238,7 @@ export function Navbar() {
           className="lg:hidden border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-4 py-4 shadow-xl space-y-3"
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
-            {navLinks.map((link) => {
+            {visibleNavLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
@@ -180,17 +261,49 @@ export function Navbar() {
           {/* Auth in Mobile Menu */}
           <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-col gap-2">
             {session?.user ? (
-              <div className="flex items-center justify-between p-2 rounded-xl bg-zinc-50 dark:bg-zinc-900">
-                <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                  {session.user.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
-                >
-                  Sign Out
-                </button>
+              <div className="flex flex-col gap-2 p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                <div className="flex items-center gap-3">
+                  {session.user.image ? (
+                    <div className="relative w-9 h-9 rounded-full overflow-hidden border border-amber-500/30">
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        fill
+                        sizes="36px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-xs flex items-center justify-center border border-amber-500/30">
+                      {session.user.name?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                      {session.user.name}
+                    </p>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                      {session.user.email}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/50">
+                  <Link
+                    href="/my-books"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-center py-2 text-xs font-semibold rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200"
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="py-2 text-xs font-semibold rounded-xl bg-red-600 text-white"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2">
