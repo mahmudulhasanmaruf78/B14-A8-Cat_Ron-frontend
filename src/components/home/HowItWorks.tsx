@@ -63,9 +63,7 @@ export function HowItWorks() {
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-          {/* Connector line (desktop) */}
-          <div className="hidden md:block absolute top-14 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-amber-300 via-blue-300 to-emerald-300 dark:from-amber-800 dark:via-blue-800 dark:to-emerald-800 z-0" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {steps.map((step) => (
             <div
