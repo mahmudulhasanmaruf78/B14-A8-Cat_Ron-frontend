@@ -35,7 +35,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BookDetailsPage({ params }: PageProps) {
   const { id } = await params;
 
-  // 1. Private route protection via BetterAuth session
   const reqHeaders = await headers();
   const session = await auth.api.getSession({
     headers: reqHeaders,
@@ -45,7 +44,6 @@ export default async function BookDetailsPage({ params }: PageProps) {
     redirect(`/login?callbackUrl=/books/${id}`);
   }
 
-  // 2. Fetch book details from backend
   const res = await BooksService.getBookById(id);
 
   if (!res.success || !res.data) {

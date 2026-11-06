@@ -89,7 +89,6 @@ export function RegisterForm() {
         toast.danger(errorMsg);
       } else {
         toast.success('Your BookNook account has been created. Please sign in.');
-        // Redirect to /login as required by the specification
         router.push('/login');
       }
     } catch {

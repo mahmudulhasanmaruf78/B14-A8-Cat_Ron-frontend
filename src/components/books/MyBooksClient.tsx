@@ -38,7 +38,6 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
         return;
       }
 
-      // Filter books strictly added by the currently logged-in user
       const normalizedUserEmail = userEmail.trim().toLowerCase();
       const myFilteredBooks = (res.data || []).filter(
         (b) => b.userEmail && b.userEmail.trim().toLowerCase() === normalizedUserEmail
@@ -70,7 +69,6 @@ export function MyBooksClient({ userEmail }: MyBooksClientProps) {
       const res = await BooksService.deleteBook(deletingBook._id);
       if (res.success) {
         toast.success('Book deleted successfully');
-        // Remove deleted book immediately from the local state
         setBooks((prev) => prev.filter((b) => b._id !== deletingBook._id));
         setDeletingBook(null);
       } else {

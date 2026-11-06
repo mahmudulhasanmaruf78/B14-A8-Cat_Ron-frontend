@@ -81,7 +81,6 @@ export function EditBookModal({ book, isOpen, onClose, onUpdated }: EditBookModa
     setIsSubmitting(true);
 
     try {
-      // Send ONLY permitted editable fields; immutable fields (_id, userName, userEmail, createdAt) are excluded
       const updateRes = await BooksService.updateBook(book._id, {
         title: title.trim(),
         author: author.trim(),

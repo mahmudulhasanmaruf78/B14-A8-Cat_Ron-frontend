@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     'A modern full-stack digital library management system built with Next.js, Express, TypeScript, Hero UI, and MongoDB.',
   keywords: ['BookNook', 'Library Management', 'Books', 'Next.js', 'Express', 'TypeScript'],
-  authors: [{ name: 'BookNook Development Team' }],
+  authors: [{ name: 'Mahmudul Hasan Maruf' }],
 };
 
 export default function RootLayout({

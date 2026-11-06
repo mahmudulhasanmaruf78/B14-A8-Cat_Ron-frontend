@@ -45,7 +45,6 @@ async function signJwt(payload: Record<string, unknown>, secretKey: string): Pro
   return `${dataToSign}.${sigB64}`;
 }
 
-// GET /api/borrows -> proxies to Express GET /borrows
 export async function GET() {
   try {
     const reqHeaders = await headers();
@@ -89,7 +88,6 @@ export async function GET() {
   }
 }
 
-// POST /api/borrows -> proxies to Express POST /borrows
 export async function POST(request: Request) {
   try {
     const reqHeaders = await headers();

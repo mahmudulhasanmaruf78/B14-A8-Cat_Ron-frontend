@@ -31,7 +31,6 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       className={`relative inline-flex items-center justify-center w-9 h-9 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-amber-400/40 dark:hover:border-amber-500/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm ${className}`}
     >
       {isDark ? (
-        // Sun Icon (shown when in dark mode to switch to light mode)
         <svg
           className="w-4 h-4 text-amber-400 hover:rotate-45 transition-transform duration-300"
           fill="none"
@@ -46,7 +45,6 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
           />
         </svg>
       ) : (
-        // Moon Icon (shown when in light mode to switch to dark mode)
         <svg
           className="w-4 h-4 text-indigo-600 hover:-rotate-12 transition-transform duration-300"
           fill="none"

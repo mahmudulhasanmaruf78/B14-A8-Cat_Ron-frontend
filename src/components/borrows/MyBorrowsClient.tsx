@@ -48,7 +48,6 @@ export function MyBorrowsClient() {
       const res = await BooksService.returnBook(returningBorrow._id);
       if (res.success) {
         toast.success('Book returned successfully');
-        // Instantly remove returned book from the local list
         setBorrows((prev) => prev.filter((b) => b._id !== returningBorrow._id));
         setReturningBorrow(null);
       } else {

@@ -55,7 +55,6 @@ export function AddBookForm({ user }: AddBookFormProps) {
     setIsSubmitting(true);
 
     try {
-      // Step 1: Upload Image to imgbb through server API
       setSubmitStep('Uploading book cover to imgbb...');
       const uploadRes = await BooksService.uploadImage(imageFile!);
 
@@ -66,7 +65,6 @@ export function AddBookForm({ user }: AddBookFormProps) {
         return;
       }
 
-      // Step 2: Post book data to backend API
       setSubmitStep('Saving book details to catalog...');
       const bookRes = await BooksService.createBook({
         title: title.trim(),
@@ -88,7 +86,6 @@ export function AddBookForm({ user }: AddBookFormProps) {
 
       toast.success('Book has been added to the library collection successfully!');
 
-      // Reset form fields
       setTitle('');
       setAuthor('');
       setCategory('');
@@ -96,7 +93,6 @@ export function AddBookForm({ user }: AddBookFormProps) {
       setDescription('');
       setTotalCopies(1);
 
-      // Redirect to books list
       router.push('/books');
     } catch {
       toast.danger('Unexpected network error occurred. Please verify backend connection.');

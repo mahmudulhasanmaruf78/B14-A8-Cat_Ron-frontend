@@ -90,7 +90,6 @@ export function BorrowModal({
     setIsSubmitting(true);
 
     try {
-      // Format ISO string representation for API contract
       const bIso = new Date(borrowDate).toISOString();
       const rIso = new Date(returnDate).toISOString();
 
@@ -108,7 +107,6 @@ export function BorrowModal({
 
       toast.success('Book borrowed successfully!');
 
-      // Refetch latest book details from server to guarantee sync
       try {
         const bookRefresh = await BooksService.getBookById(book._id);
         if (bookRefresh.success && bookRefresh.data) {
